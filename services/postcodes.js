@@ -9,30 +9,33 @@ const remoteApi = apiAdapter(config.remoteCountryService.basePath);
 class UploadService {
   postCodes() {
     return new Promise((resolve, reject) => {
-      new PostcodeRepository().getAllPostCodes().then((result) => {
-        log.debug(result);
-        for (let index = 0; index < result.length; index++) {
-          const element = result[index];
-          remoteApi
-            .get(
-              config.remoteCountryService.basePath +
-                "postcodes?lon=" +
-                element.log +
-                "&lat=" +
-                element.lat
-            )
-            .then((data) => {
-              new PostcodeRepository()
-                .create(data.data.result[index].postcode)
-                .then(() => {
-                  resolve({ postcodes: true });
-                });
-            });
-        }
-      }).catch((error) => {
-        log.error(error);
-        reject({ error: error });
-      });;
+      new PostcodeRepository()
+        .getAllPostCodes()
+        .then((result) => {
+          log.debug(result);
+          for (let index = 0; index < result.length; index++) {
+            const element = result[index];
+            remoteApi
+              .get(
+                config.remoteCountryService.basePath +
+                  "postcodes?lon=" +
+                  element.log +
+                  "&lat=" +
+                  element.lat
+              )
+              .then((data) => {
+                new PostcodeRepository()
+                  .create(data.data.result[index].postcode)
+                  .then(() => {
+                    resolve({ postcodes: true });
+                  });
+              });
+          }
+        })
+        .catch((error) => {
+          log.error(error);
+          reject({ error: error });
+        });
     }).catch((error) => {
       log.error(error);
       reject({ error: error });
