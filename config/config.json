@@ -1,0 +1,9 @@
+{
+    "db_config" : {
+      "host": "localhost",
+      "user": "ruben",
+      "pass":"rubendario21",
+      "port": 3306,
+      "name": "postcodes"
+    }
+  }
